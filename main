@@ -1,0 +1,98 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace HangMan
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+
+            int lives,lettersRevealed;
+            bool won;
+            string input;
+            char guess;
+            List<char> correctGuesses = new List<char>();
+            List<char> incorrectGuesses = new List<char>();
+        
+            lives = 5;
+            won = false;
+            lettersRevealed = 0;
+
+            Random random = new Random((int)DateTime.Now.Ticks);
+            string[] wordBank = { "blue" };
+            string wordToGuess = wordBank[random.Next(0, wordBank.Length)];
+            string wordToGuessUppercase = wordToGuess.ToUpper();
+            StringBuilder displayToPlayer = new StringBuilder(wordToGuess.Length);
+
+            for (int i = 0; i < wordToGuess.Length; i++)
+            {
+                displayToPlayer.Append('_');
+            }
+
+                                 
+            while (!won && lives > 0)
+            {
+                Console.WriteLine("guess a letter \n");
+                input = Console.ReadLine().ToUpper();
+                guess = input[0];
+
+
+                if (correctGuesses.Contains(guess)){
+                    Console.WriteLine("you've tried '{0}', it was correct", guess);
+                } else 
+                if (incorrectGuesses.Contains(guess)) {
+                    Console.WriteLine("you've tried {0}, it was incorrect", guess);
+                }
+
+
+
+
+
+                if (wordToGuessUppercase.Contains(guess))
+                {
+                    correctGuesses.Add(guess);
+                    for (int i = 0; i < wordToGuess.Length; i++)
+                    {
+                        if (wordToGuessUppercase[i] == guess)
+                        {
+                            displayToPlayer[i] = wordToGuess[i];
+                            lettersRevealed++;
+                        }
+                    }
+
+                    if (lettersRevealed == wordToGuess.Length)
+                    {
+                        won = true;
+                    }else
+                    {
+                        incorrectGuesses.Add(guess);
+                        Console.WriteLine("nope,there's no '{0}' in it", guess);
+                        lives--;
+                    }
+                    Console.WriteLine(displayToPlayer.ToString());
+
+
+                }
+
+                if (won)
+                {
+                    Console.WriteLine("you've won");
+                    Console.WriteLine("press key to exit");
+                    Console.ReadLine();
+                }
+                else
+                {
+                    Console.WriteLine("you've lost, it was '{0}' in it ", wordToGuess);
+                    Console.WriteLine("press key to exit");
+                    Console.ReadLine();
+                }
+
+                                                                                                                                        
+            }
+        }
+    }
+}
